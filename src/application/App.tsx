@@ -1,15 +1,11 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
-import {SafeAreaView, useColorScheme} from 'react-native';
+import {useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {ProductsList} from '../features/products';
 import {QueryProvider} from '../infrastructure/query';
+import CartScreen from '../features/cart/CartScreen';
+import ProductsScreen from '../features/products/ProductsScreen';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -18,13 +14,22 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
 
+  const appNavigator = createNativeStackNavigator();
+
   return (
-    <QueryProvider>
-      <SafeAreaView style={backgroundStyle}>
-        <ProductsList />
-      </SafeAreaView>
-    </QueryProvider>
+    <NavigationContainer>
+      <appNavigator.Navigator screenOptions={{headerShown: false}}>
+        <appNavigator.Screen name="Products" component={ProductsScreen} />
+        <appNavigator.Screen name="Cart" component={CartScreen} />
+      </appNavigator.Navigator>
+    </NavigationContainer>
   );
 }
 
-export default App;
+export default () => {
+  return (
+    <QueryProvider>
+      <App />
+    </QueryProvider>
+  );
+};
