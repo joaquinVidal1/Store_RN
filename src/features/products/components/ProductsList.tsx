@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
-import {Text} from 'react-native-reanimated/lib/typescript/Animated';
 import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../infrastructure/store/hooks/hooks';
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
 import {useProducts} from '../queries';
 import HeaderListItem from './HeaderListItem';
@@ -22,7 +24,6 @@ export interface Product {
 
 export const ProductsList = () => {
   const {data: apiAproducts} = useProducts();
-  const dispatch = useAppDispatch();
   const {cart, error, loading} = useAppSelector(state => state.products);
   const [displayList, setDisplaList] = useState<(Product | string)[]>([]);
 
@@ -39,7 +40,7 @@ export const ProductsList = () => {
               category: product.category,
               checkoutImageUrl: product.checkoutImageUrl,
               listImageUrl: product.listImageUrl,
-              quantity: cartItem ? cartItem?.quantity : 0,
+              quantity: cartItem ? cartItem.quantity : 0,
             };
           }),
         ),
@@ -67,7 +68,6 @@ export const ProductsList = () => {
           typeof item === 'string' ? `category-${index}` : item.id.toString()
         }
         renderItem={item => {
-          console.log(`${typeof item.item}`);
           return typeof item.item === 'string' ? (
             <HeaderListItem header={item.item} />
           ) : (

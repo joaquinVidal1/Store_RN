@@ -1,9 +1,25 @@
 import React from 'react';
-import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
-import {Product} from '../../../infrastructure/api';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
+import {
+  decrementQuantity,
+  incrementQuantity,
+} from '../../../infrastructure/store/productsSlice';
 import {colors} from '../../shared/colors';
+import AddButton from './AddButton';
+import {Product} from './ProductsList';
 
 const ProductListItem = ({product}: {product: Product}) => {
+  const dispatch = useAppDispatch();
+
+  const onAddProduct = () => {
+    dispatch(incrementQuantity(product.id));
+  };
+
+  const onRemoveProduct = () => {
+    dispatch(decrementQuantity(product.id));
+  };
+
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
@@ -16,9 +32,11 @@ const ProductListItem = ({product}: {product: Product}) => {
           <Text style={styles.productPrice}>${product.price}</Text>
         </View>
       </View>
-      <TouchableOpacity style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add</Text>
-      </TouchableOpacity>
+      <AddButton
+        quantity={product.quantity}
+        onAddProduct={onAddProduct}
+        onRemoveProduct={onRemoveProduct}
+      />
     </View>
   );
 };
@@ -46,18 +64,6 @@ const styles = StyleSheet.create({
   productPrice: {
     fontSize: 16,
     color: colors.secondaryColor,
-  },
-  addButton: {
-    paddingVertical: 6,
-    paddingHorizontal: 32,
-    borderRadius: 50,
-    borderWidth: 2,
-    borderColor: colors.purple,
-  },
-  addButtonText: {
-    color: colors.purple,
-    fontWeight: 'bold',
-    fontSize: 16,
   },
   textsContainer: {
     flexDirection: 'column',

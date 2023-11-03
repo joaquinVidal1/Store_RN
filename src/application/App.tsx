@@ -3,9 +3,11 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {useColorScheme} from 'react-native';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
-import {QueryProvider} from '../infrastructure/query';
+import {Provider} from 'react-redux';
 import CartScreen from '../features/cart/CartScreen';
 import ProductsScreen from '../features/products/ProductsScreen';
+import {QueryProvider} from '../infrastructure/query';
+import store from '../infrastructure/store/store';
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -29,7 +31,9 @@ function App(): JSX.Element {
 export default () => {
   return (
     <QueryProvider>
-      <App />
+      <Provider store={store}>
+        <App />
+      </Provider>
     </QueryProvider>
   );
 };
