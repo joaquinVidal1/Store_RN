@@ -1,6 +1,6 @@
 import {instance} from './instance';
 
-export interface Product {
+export interface ApiProduct {
   id: number;
   name: string;
   price: number;
@@ -9,7 +9,7 @@ export interface Product {
   listImageUrl: string;
 }
 
-export const getProducts = (): Promise<Product[]> => {
+export const getProducts = (): Promise<ApiProduct[]> => {
   return instance
     .get('/products')
     .then(response => {

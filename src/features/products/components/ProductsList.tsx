@@ -1,23 +1,60 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
+import {ActivityIndicator, FlatList, StyleSheet, View} from 'react-native';
+import {Text} from 'react-native-reanimated/lib/typescript/Animated';
 import {
-  FlatList,
-  Text,
-  View,
-  StyleSheet,
-  ActivityIndicator,
-} from 'react-native';
-import {Product} from '../../../infrastructure/api';
+  useAppDispatch,
+  useAppSelector,
+} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
 import {useProducts} from '../queries';
 import HeaderListItem from './HeaderListItem';
 import ProductListItem from './ProductListItem';
 
-export const ProductsList = () => {
-  const {data, isLoading} = useProducts();
-  const displayList = data ? sortAndGroupProductsByCategory(data) : [];
+export interface Product {
+  id: number;
+  name: string;
+  price: number;
+  category: string;
+  checkoutImageUrl: string;
+  listImageUrl: string;
+  quantity: number;
+}
 
-  if (isLoading) {
+export const ProductsList = () => {
+  const {data: apiAproducts} = useProducts();
+  const dispatch = useAppDispatch();
+  const {cart, error, loading} = useAppSelector(state => state.products);
+  const [displayList, setDisplaList] = useState<(Product | string)[]>([]);
+
+  useEffect(() => {
+    if (apiAproducts) {
+      setDisplaList(
+        sortAndGroupProductsByCategory(
+          apiAproducts?.map(product => {
+            const cartItem = cart.find(it => it.id === product.id);
+            return {
+              id: product.id,
+              name: product.name,
+              price: product.price,
+              category: product.category,
+              checkoutImageUrl: product.checkoutImageUrl,
+              listImageUrl: product.listImageUrl,
+              quantity: cartItem ? cartItem?.quantity : 0,
+            };
+          }),
+        ),
+      );
+    } else {
+      setDisplaList([]);
+    }
+  }, [apiAproducts, cart]);
+
+  if (loading) {
     return <ActivityIndicator size={'large'} />;
+  }
+
+  if (error) {
+    return <Text>{error}</Text>;
   }
 
   return (
