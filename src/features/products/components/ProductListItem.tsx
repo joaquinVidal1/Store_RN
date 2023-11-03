@@ -1,18 +1,21 @@
 import React from 'react';
 import {Text, View, StyleSheet, Image, TouchableOpacity} from 'react-native';
 import {Product} from '../../../infrastructure/api';
+import {colors} from '../../shared/colors';
 
-const ProductListItem = (product: Product) => {
+const ProductListItem = ({product}: {product: Product}) => {
   return (
     <View style={styles.container}>
-      <View style={styles.imageContainer}>
+      <View style={{flexDirection: 'row'}}>
         <Image
           source={{uri: product.listImageUrl}}
           style={styles.productImage}
         />
+        <View style={styles.textsContainer}>
+          <Text style={styles.productName}>{product.name}</Text>
+          <Text style={styles.productPrice}>${product.price}</Text>
+        </View>
       </View>
-      <Text style={styles.productName}>{product.name}</Text>
-      <Text style={styles.productPrice}>{product.price}</Text>
       <TouchableOpacity style={styles.addButton}>
         <Text style={styles.addButtonText}>Add</Text>
       </TouchableOpacity>
@@ -24,39 +27,41 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  imageContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: '#D8BFD8', // Color de fondo púrpura
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: '#FAFAFA',
+    paddingHorizontal: 18,
+    paddingVertical: 16,
+    justifyContent: 'space-between',
   },
   productImage: {
-    width: 60,
-    height: 60,
-    resizeMode: 'cover',
+    width: 56,
+    height: 56,
+    borderRadius: 50,
   },
   productName: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: 'bold',
     marginVertical: 8,
+    color: colors.primaryColor,
   },
   productPrice: {
     fontSize: 16,
-    color: 'gray',
+    color: colors.secondaryColor,
   },
   addButton: {
-    marginTop: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: '#7E3DFF', // Color de fondo del botón
-    borderRadius: 20,
+    paddingVertical: 6,
+    paddingHorizontal: 32,
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: colors.purple,
   },
   addButtonText: {
-    color: 'white',
+    color: colors.purple,
     fontWeight: 'bold',
+    fontSize: 16,
+  },
+  textsContainer: {
+    flexDirection: 'column',
+    marginStart: 24,
   },
 });
 
