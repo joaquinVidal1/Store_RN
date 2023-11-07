@@ -1,14 +1,15 @@
 import React from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import {Product} from '../../infrastructure/api';
+import Carrousel from './components/Carrousel';
 import {ProductsList} from './components/ProductsList';
 
 const ProductsScreen = () => {
   return (
     <View>
       <SafeAreaView>
-        <View>
+        <View style={styles.container}>
+          <Carrousel />
           <ProductsList />
         </View>
       </SafeAreaView>
@@ -16,6 +17,14 @@ const ProductsScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: 'column',
+  },
+  carrousel: {
+    width: '100%',
+    height: 250,
+  },
+});
 
 export default ProductsScreen;

@@ -26,3 +26,28 @@ export const getProducts = (): Promise<ApiProduct[]> => {
       throw error;
     });
 };
+
+export interface Banner {
+  id: number;
+  name: string;
+  description: string;
+  imageUrl: string;
+}
+
+export const getBanners = (): Promise<Banner[]> => {
+  return instance
+    .get('/promoted')
+    .then(response => {
+      console.log('response: ', response);
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error('Error fetching products');
+      }
+    })
+    .catch(error => {
+      console.log('entro error');
+      console.log(error);
+      throw error;
+    });
+};
