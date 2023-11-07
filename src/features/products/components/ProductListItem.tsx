@@ -1,10 +1,10 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
 import {
   decrementQuantity,
   incrementQuantity,
-} from '../../../infrastructure/store/productsSlice';
+} from '../../../infrastructure/store/cartSlice';
+import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
 import AddButton from './AddButton';
 import {Product} from './ProductsList';

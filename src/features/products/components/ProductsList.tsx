@@ -24,7 +24,7 @@ export interface Product {
 
 export const ProductsList = () => {
   const {data: apiAproducts} = useProducts();
-  const {cart, error, loading} = useAppSelector(state => state.products);
+  const {cart, error, loading} = useAppSelector(state => state.cart);
   const [displayList, setDisplaList] = useState<(Product | string)[]>([]);
 
   useEffect(() => {

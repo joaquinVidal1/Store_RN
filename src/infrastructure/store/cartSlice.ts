@@ -5,20 +5,20 @@ interface CartProduct {
   quantity: number;
 }
 
-interface ProductsState {
+interface CartState {
   cart: CartProduct[];
   error?: string;
   loading: boolean;
 }
 
-const initialState: ProductsState = {
+const initialState: CartState = {
   cart: [],
   error: undefined,
   loading: false,
 };
 
-const productsSlice = createSlice({
-  name: 'products',
+const cartSlice = createSlice({
+  name: 'cart',
   initialState,
   reducers: {
     incrementQuantity(state, action: PayloadAction<number>) {
@@ -39,5 +39,5 @@ const productsSlice = createSlice({
   },
 });
 
-export const {incrementQuantity, decrementQuantity} = productsSlice.actions;
-export default productsSlice.reducer;
+export const {incrementQuantity, decrementQuantity} = cartSlice.actions;
+export default cartSlice.reducer;
