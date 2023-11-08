@@ -1,5 +1,6 @@
 import React from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
+import SearchIcon from '../../../../res/search.svg';
 
 const SearchBar = ({
   query,
@@ -12,6 +13,7 @@ const SearchBar = ({
 }) => {
   return (
     <View style={[styles.container, style]}>
+      <SearchIcon />
       <TextInput
         style={styles.input}
         placeholder="Search"
@@ -30,9 +32,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: '#EEEFF4',
     borderRadius: 20,
-    margin: 10,
+    marginHorizontal: 18,
   },
   searchIcon: {
     padding: 10,
