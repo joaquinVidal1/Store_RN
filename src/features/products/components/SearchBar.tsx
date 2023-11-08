@@ -13,7 +13,7 @@ const SearchBar = ({
 }) => {
   return (
     <View style={[styles.container, style]}>
-      <SearchIcon />
+      <SearchIcon style={styles.searchIcon} />
       <TextInput
         style={styles.input}
         placeholder="Search"
@@ -30,14 +30,14 @@ export default SearchBar;
 const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
     backgroundColor: '#EEEFF4',
     borderRadius: 20,
     marginHorizontal: 18,
+    alignContent: 'center',
+    alignItems: 'center',
   },
   searchIcon: {
-    padding: 10,
+    margin: 10,
   },
   input: {
     flex: 1,
@@ -48,5 +48,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f0f0f0',
     color: '#424242',
     borderRadius: 20,
+    fontSize: 12,
   },
 });

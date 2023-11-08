@@ -27,28 +27,26 @@ const ProductsScreen = () => {
   );
 
   return (
-    <View>
-      <SafeAreaView>
-        <View style={styles.container}>
-          <View style={styles.cartButton}>{cartImage}</View>
-          <Carrousel />
-          <SearchBar
-            style={styles.searchBar}
-            query={query}
-            onQueryChanged={newQuery => {
-              setQuery(newQuery);
-            }}
-          />
-          <ProductsList query={query} />
-        </View>
-      </SafeAreaView>
-    </View>
+    <SafeAreaView style={{flex: 1}}>
+      <View style={styles.container}>
+        <View style={styles.cartButton}>{cartImage}</View>
+        <Carrousel />
+        <SearchBar
+          style={styles.searchBar}
+          query={query}
+          onQueryChanged={newQuery => {
+            setQuery(newQuery);
+          }}
+        />
+        <ProductsList query={query} />
+      </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'column',
+    flex: 1,
   },
   carrousel: {
     width: '100%',

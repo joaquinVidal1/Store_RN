@@ -5,10 +5,12 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import {useColorScheme} from 'react-native';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Provider} from 'react-redux';
 import CartScreen from '../features/cart/CartScreen';
 import ProductsScreen from '../features/products/ProductsScreen';
+import {colors} from '../features/shared/colors';
 import {QueryProvider} from '../infrastructure/query';
 import store from '../infrastructure/store/store';
 
@@ -24,7 +26,7 @@ function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: isDarkMode ? Colors.darker : colors.backgroundColor,
   };
 
   return (
@@ -42,7 +44,9 @@ export default () => {
   return (
     <QueryProvider>
       <Provider store={store}>
-        <App />
+        <SafeAreaProvider>
+          <App />
+        </SafeAreaProvider>
       </Provider>
     </QueryProvider>
   );

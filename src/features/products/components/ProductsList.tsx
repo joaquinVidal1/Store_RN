@@ -66,8 +66,9 @@ export const ProductsList = ({query}: {query: string}) => {
   }
 
   return (
-    <View>
+    <View style={styles.container}>
       <FlatList
+        // bounces={false}
         style={styles.flatList}
         data={displayList}
         ItemSeparatorComponent={productsSeparator}
@@ -121,7 +122,11 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   flatList: {
-    flexGrow: 1,
     backgroundColor: colors.backgroundColor,
+  },
+  container: {
+    flex: 1,
+    // backgroundColor: colors.backgroundColor,
+    backgroundColor: 'red',
   },
 });
