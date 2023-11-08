@@ -13,7 +13,6 @@ export const getProducts = (): Promise<ApiProduct[]> => {
   return instance
     .get('/products')
     .then(response => {
-      console.log('response: ', response);
       if (response.status === 200) {
         return response.data;
       } else {
@@ -38,7 +37,6 @@ export const getBanners = (): Promise<Banner[]> => {
   return instance
     .get('/promoted')
     .then(response => {
-      console.log('response: ', response);
       if (response.status === 200) {
         return response.data;
       } else {

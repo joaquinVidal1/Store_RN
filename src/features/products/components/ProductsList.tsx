@@ -22,7 +22,7 @@ export interface Product {
   quantity: number;
 }
 
-export const ProductsList = () => {
+export const ProductsList = ({query}: {query: string}) => {
   const {data: apiAproducts} = useProducts();
   const {cart, error, loading} = useAppSelector(state => state.cart);
   const [displayList, setDisplaList] = useState<(Product | string)[]>([]);
@@ -31,24 +31,31 @@ export const ProductsList = () => {
     if (apiAproducts) {
       setDisplaList(
         sortAndGroupProductsByCategory(
-          apiAproducts?.map(product => {
-            const cartItem = cart.find(it => it.id === product.id);
-            return {
-              id: product.id,
-              name: product.name,
-              price: product.price,
-              category: product.category,
-              checkoutImageUrl: product.checkoutImageUrl,
-              listImageUrl: product.listImageUrl,
-              quantity: cartItem ? cartItem.quantity : 0,
-            };
-          }),
+          apiAproducts
+            ?.filter(product => {
+              return query.length !== 0
+                ? product.category.includes(query) ||
+                    product.name.includes(query)
+                : true;
+            })
+            .map(product => {
+              const cartItem = cart.find(it => it.id === product.id);
+              return {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                category: product.category,
+                checkoutImageUrl: product.checkoutImageUrl,
+                listImageUrl: product.listImageUrl,
+                quantity: cartItem ? cartItem.quantity : 0,
+              };
+            }),
         ),
       );
     } else {
       setDisplaList([]);
     }
-  }, [apiAproducts, cart]);
+  }, [apiAproducts, cart, query]);
 
   if (loading) {
     return <ActivityIndicator size={'large'} />;

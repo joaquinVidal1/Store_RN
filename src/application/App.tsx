@@ -20,7 +20,8 @@ function App(): JSX.Element {
 
   return (
     <NavigationContainer>
-      <appNavigator.Navigator screenOptions={{headerShown: false}}>
+      <appNavigator.Navigator
+        screenOptions={{headerShown: false, contentStyle: backgroundStyle}}>
         <appNavigator.Screen name="Products" component={ProductsScreen} />
         <appNavigator.Screen name="Cart" component={CartScreen} />
       </appNavigator.Navigator>

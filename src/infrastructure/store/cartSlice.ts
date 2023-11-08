@@ -33,7 +33,7 @@ const cartSlice = createSlice({
       const cartItem = state.cart.find(prod => prod.id === action.payload);
       if (cartItem) {
         cartItem.quantity -= 1;
-        state.cart.filter(it => it.quantity !== 0);
+        state.cart = state.cart.filter(it => it.quantity !== 0);
       }
     },
   },

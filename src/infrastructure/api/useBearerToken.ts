@@ -9,7 +9,6 @@ export const useBearerToken = (token: string | undefined) => {
 
   useEffect(() => {
     const tokenInterceptor = instance.interceptors.request.use(config => {
-      console.log('adding token');
       const tokenValue = tokenRef.current;
       if (tokenValue !== undefined) {
         config.headers.Authorization = `Bearer ${tokenValue}`;
