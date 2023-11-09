@@ -12,6 +12,10 @@ import {NavigationProp} from '../../application/App';
 import {colors} from '../shared/colors';
 import CartList from './components/CartList';
 
+export const MARGIN_HORIZONTAL = 18;
+export const MARGIN_BETWEEN_COLUMNS = 12;
+export const IMAGE_SIZE = 150;
+
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   return (
@@ -33,7 +37,7 @@ const CartScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 22,
+    marginHorizontal: MARGIN_HORIZONTAL,
   },
   iconBack: {
     marginTop: 16,

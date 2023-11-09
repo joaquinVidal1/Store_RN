@@ -26,6 +26,7 @@ const ProductListItem = ({product}: {product: Product}) => {
         <Image
           source={{uri: product.listImageUrl}}
           style={styles.productImage}
+          defaultSource={require('../../../../res/placeholder.jpg')}
         />
         <View style={styles.textsContainer}>
           <Text style={styles.productName}>{product.name}</Text>

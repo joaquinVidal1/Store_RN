@@ -1,17 +1,59 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
+import {StyleProps} from 'react-native-reanimated';
 import {Product} from '../../products/components/ProductsList';
+import {colors} from '../../shared/colors';
 
-const CartItem = ({product}: {product: Product}) => {
+const CartItem = ({product, style}: {product: Product; style: StyleProps}) => {
   return (
-    <View>
-      <Text />
+    <View style={[styles.container, style]}>
+      <Image
+        source={{uri: product.checkoutImageUrl}}
+        style={styles.iamge}
+        defaultSource={require('../../../../res/placeholder.jpg')}
+      />
+      <View style={styles.nameAndPriceContainer}>
+        <Text style={styles.productName}>{product.name}</Text>
+        <Text style={styles.productPrice}>{'$' + product.price}</Text>
+      </View>
+      <Text style={styles.units}>{product.quantity + ' units'}</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {},
+  container: {
+    minWidth: 150,
+    flex: 1,
+    maxWidth: 180,
+  },
+  iamge: {
+    flex: 1,
+    aspectRatio: 1,
+    borderRadius: 4,
+  },
+  productName: {
+    fontWeight: 'bold',
+    fontSize: 16,
+    color: colors.primaryColor,
+    marginStart: 8,
+  },
+  productPrice: {
+    color: colors.secondaryColor,
+    fontSize: 16,
+    marginEnd: 12,
+  },
+  units: {
+    color: colors.secondaryColor,
+    fontSize: 16,
+    marginTop: 8,
+    marginStart: 8,
+  },
+  nameAndPriceContainer: {
+    marginTop: 20,
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+  },
 });
 
 export default CartItem;
