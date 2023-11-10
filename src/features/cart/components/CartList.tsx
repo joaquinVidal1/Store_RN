@@ -1,5 +1,6 @@
 import React, {useMemo} from 'react';
 import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
+import {StyleProps} from 'react-native-reanimated';
 import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
 import {Product} from '../../products/components/ProductsList';
 import {useProducts} from '../../products/queries';
@@ -14,7 +15,7 @@ const RowsSeparator = () => {
   return <View style={{height: 20}} />;
 };
 
-const CartList = () => {
+const CartList = ({style}: {style: StyleProps}) => {
   const {data: apiProducts} = useProducts();
   const {width} = useWindowDimensions();
 
@@ -37,7 +38,11 @@ const CartList = () => {
   return (
     <FlatList
       data={displayList}
-      contentContainerStyle={{paddingTop: 24, alignItems: 'stretch'}}
+      contentContainerStyle={{
+        paddingTop: 24,
+        alignItems: 'stretch',
+        marginHorizontal: MARGIN_HORIZONTAL,
+      }}
       renderItem={({item, index}) => (
         <CartItem
           product={item}
@@ -46,7 +51,7 @@ const CartList = () => {
       )}
       keyExtractor={product => product.id.toString()}
       numColumns={numColumns}
-      style={styles.list}
+      style={[styles.list, style]}
       ItemSeparatorComponent={RowsSeparator}
     />
   );
