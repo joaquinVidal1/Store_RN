@@ -5,6 +5,7 @@ import {
 } from '@react-navigation/native-stack';
 import React from 'react';
 import {useColorScheme} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Provider} from 'react-redux';
@@ -42,12 +43,14 @@ function App(): JSX.Element {
 
 export default () => {
   return (
-    <QueryProvider>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <App />
-        </SafeAreaProvider>
-      </Provider>
-    </QueryProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <QueryProvider>
+        <Provider store={store}>
+          <SafeAreaProvider>
+            <App />
+          </SafeAreaProvider>
+        </Provider>
+      </QueryProvider>
+    </GestureHandlerRootView>
   );
 };

@@ -1,5 +1,6 @@
+import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
-import React, {useMemo} from 'react';
+import React, {useMemo, useRef, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -9,9 +10,15 @@ import {
 } from 'react-native';
 import ArrowBack from '../../../res/arrow_back.svg';
 import {NavigationProp} from '../../application/App';
-import {useAppSelector} from '../../infrastructure/store/hooks/hooks';
+import {editQuantity} from '../../infrastructure/store/cartSlice';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../infrastructure/store/hooks/hooks';
+import {Product} from '../products/components/ProductsList';
 import {useProducts} from '../products/queries';
 import {colors} from '../shared/colors';
+import ProductBottomSheet from './components/BottomSheet';
 import CartList from './components/CartList';
 import ConfirmationButton from './components/ConfirmationButton';
 
@@ -23,6 +30,19 @@ const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
   const cart = useAppSelector(state => state.cart.cart);
   const {data: products} = useProducts();
+  const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
+    undefined,
+  );
+
+  const dispatch = useAppDispatch();
+
+  const bottomSheetModalRef: React.RefObject<BottomSheetModal> =
+    useRef<BottomSheetModal>(null);
+
+  const showBottomSheet = (product: Product) => {
+    bottomSheetModalRef.current?.present();
+    setEdittingProduct(product);
+  };
 
   const totalAmount = useMemo(() => {
     return cart
@@ -35,28 +55,50 @@ const CartScreen = () => {
 
   return (
     <SafeAreaView>
-      <View style={styles.container}>
-        <TouchableOpacity
-          style={styles.iconBack}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <ArrowBack />
-        </TouchableOpacity>
-        <Text style={styles.title}>Shopping Cart</Text>
-        <CartList style={styles.cartList} />
-        <View style={styles.bottomContainer}>
-          <View style={styles.totalAmountContainer}>
-            <Text style={styles.total}>Total:</Text>
-            <Text style={styles.totalAmount}>{'$' + totalAmount}</Text>
-          </View>
-          <ConfirmationButton
-            onPress={() => {}}
-            text="Checkout"
-            color="#4C2DE8"
+      <BottomSheetModalProvider>
+        <View style={styles.container}>
+          <TouchableOpacity
+            style={styles.iconBack}
+            onPress={() => {
+              navigation.goBack();
+            }}>
+            <ArrowBack />
+          </TouchableOpacity>
+          <Text style={styles.title}>Shopping Cart</Text>
+          <CartList
+            style={styles.cartList}
+            onProductPressed={product => showBottomSheet(product)}
           />
+          <View style={styles.bottomContainer}>
+            <View style={styles.totalAmountContainer}>
+              <Text style={styles.total}>Total:</Text>
+              <Text style={styles.totalAmount}>{'$' + totalAmount}</Text>
+            </View>
+            <ConfirmationButton
+              onPress={() => {}}
+              text="Checkout"
+              style={styles.buttonColor}
+            />
+          </View>
+          {edittingProduct ? (
+            <ProductBottomSheet
+              product={edittingProduct}
+              reference={bottomSheetModalRef}
+              onConfirmEdittion={quantity => {
+                dispatch(
+                  editQuantity({
+                    prodctId: edittingProduct.id,
+                    newQuantity: quantity,
+                  }),
+                );
+                bottomSheetModalRef.current?.dismiss();
+              }}
+            />
+          ) : (
+            <></>
+          )}
         </View>
-      </View>
+      </BottomSheetModalProvider>
     </SafeAreaView>
   );
 };
@@ -99,6 +141,9 @@ const styles = StyleSheet.create({
     fontSize: 32,
     color: colors.primaryColor,
     fontWeight: 'bold',
+  },
+  buttonColor: {
+    backgroundColor: '#4C2DE8',
   },
 });
 

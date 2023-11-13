@@ -15,7 +15,13 @@ const RowsSeparator = () => {
   return <View style={{height: 20}} />;
 };
 
-const CartList = ({style}: {style: StyleProps}) => {
+const CartList = ({
+  style,
+  onProductPressed,
+}: {
+  style: StyleProps;
+  onProductPressed: (product: Product) => void;
+}) => {
   const {data: apiProducts} = useProducts();
   const {width} = useWindowDimensions();
 
@@ -47,6 +53,7 @@ const CartList = ({style}: {style: StyleProps}) => {
         <CartItem
           product={item}
           style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
+          onPress={() => onProductPressed(item)}
         />
       )}
       keyExtractor={product => product.id.toString()}

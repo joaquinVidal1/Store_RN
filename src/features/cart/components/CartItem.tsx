@@ -1,12 +1,20 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StyleProps} from 'react-native-reanimated';
 import {Product} from '../../products/components/ProductsList';
 import {colors} from '../../shared/colors';
 
-const CartItem = ({product, style}: {product: Product; style: StyleProps}) => {
+const CartItem = ({
+  product,
+  style,
+  onPress,
+}: {
+  product: Product;
+  style: StyleProps;
+  onPress: () => void;
+}) => {
   return (
-    <View style={[styles.container, style]}>
+    <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Image
         source={{uri: product.checkoutImageUrl}}
         style={styles.iamge}
@@ -19,7 +27,7 @@ const CartItem = ({product, style}: {product: Product; style: StyleProps}) => {
         </Text>
       </View>
       <Text style={styles.units}>{product.quantity + ' units'}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 

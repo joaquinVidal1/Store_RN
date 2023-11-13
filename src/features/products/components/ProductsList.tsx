@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useMemo} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -6,7 +6,14 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
+import {
+  decrementQuantity,
+  incrementQuantity,
+} from '../../../infrastructure/store/cartSlice';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
 import {useProducts} from '../queries';
 import HeaderListItem from './HeaderListItem';
@@ -25,12 +32,10 @@ export interface Product {
 export const ProductsList = ({query}: {query: string}) => {
   const {data: apiAproducts} = useProducts();
   const {cart, error, loading} = useAppSelector(state => state.cart);
-  const [displayList, setDisplaList] = useState<(Product | string)[]>([]);
 
-  useEffect(() => {
-    if (apiAproducts) {
-      setDisplaList(
-        sortAndGroupProductsByCategory(
+  const displayList = useMemo(() => {
+    return apiAproducts
+      ? sortAndGroupProductsByCategory(
           apiAproducts
             ?.filter(product => {
               return query.length !== 0
@@ -41,21 +46,24 @@ export const ProductsList = ({query}: {query: string}) => {
             .map(product => {
               const cartItem = cart.find(it => it.id === product.id);
               return {
-                id: product.id,
-                name: product.name,
-                price: product.price,
-                category: product.category,
-                checkoutImageUrl: product.checkoutImageUrl,
-                listImageUrl: product.listImageUrl,
+                ...product,
                 quantity: cartItem ? cartItem.quantity : 0,
               };
             }),
-        ),
-      );
-    } else {
-      setDisplaList([]);
-    }
+        )
+      : [];
   }, [apiAproducts, cart, query]);
+
+  const dispatch = useAppDispatch();
+
+  const onAddProduct = (product: Product) => {
+    console.log('onAddProduct. Product: ', product);
+    dispatch(incrementQuantity(product.id));
+  };
+
+  const onRemoveProduct = (product: Product) => {
+    dispatch(decrementQuantity(product.id));
+  };
 
   if (loading) {
     return <ActivityIndicator size={'large'} />;
@@ -79,7 +87,11 @@ export const ProductsList = ({query}: {query: string}) => {
           return typeof item.item === 'string' ? (
             <HeaderListItem header={item.item} />
           ) : (
-            <ProductListItem product={item.item} />
+            <ProductListItem
+              product={item.item}
+              onAddProduct={onAddProduct}
+              onRemoveProduct={onRemoveProduct}
+            />
           );
         }}
       />
