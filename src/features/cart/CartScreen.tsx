@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import ArrowBack from '../../../res/arrow_back.svg';
 import {NavigationProp} from '../../application/App';
-import {editQuantity} from '../../infrastructure/store/cartSlice';
+import {cleanCart, editQuantity} from '../../infrastructure/store/cartSlice';
 import {
   useAppDispatch,
   useAppSelector,
@@ -92,7 +92,10 @@ const CartScreen = () => {
               <Text style={styles.totalAmount}>{'$' + totalAmount}</Text>
             </View>
             <ConfirmationButton
-              onPress={() => {}}
+              onPress={() => {
+                dispatch(cleanCart());
+                navigation.goBack();
+              }}
               text="Checkout"
               style={styles.buttonColor}
             />

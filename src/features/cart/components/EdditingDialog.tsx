@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
-import {Modal, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import Modal from 'react-native-modal';
 import ProductListItem from '../../products/components/ProductListItem';
 import {Product} from '../../products/components/ProductsList';
 import {colors} from '../../shared/colors';
@@ -27,12 +28,11 @@ const EdditingDialog = ({
 
   return (
     <Modal
-      animationType="slide"
-      transparent={true}
-      visible={showModal}
-      onRequestClose={() => {
-        onDismiss();
-      }}>
+      animationIn="fadeIn"
+      animationOut="fadeOut"
+      onBackdropPress={onDismiss}
+      onDismiss={onDismiss}
+      isVisible={showModal}>
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <Text style={styles.title}>Edit item count</Text>
