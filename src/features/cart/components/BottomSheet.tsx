@@ -1,10 +1,18 @@
-import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {
+  BottomSheetBackdrop,
+  BottomSheetBackdropProps,
+  BottomSheetModal,
+} from '@gorhom/bottom-sheet';
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import ProductListItem from '../../products/components/ProductListItem';
 import {Product} from '../../products/components/ProductsList';
 import {colors} from '../../shared/colors';
 import ConfirmationButton from './ConfirmationButton';
+
+const Backdrop = (props: BottomSheetBackdropProps) => (
+  <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
+);
 
 const ProductBottomSheet = ({
   product,
@@ -29,6 +37,7 @@ const ProductBottomSheet = ({
 
   return (
     <BottomSheetModal
+      backdropComponent={Backdrop}
       ref={reference}
       snapPoints={['39%']}
       onDismiss={onDismiss}>
