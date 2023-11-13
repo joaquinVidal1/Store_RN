@@ -1,6 +1,6 @@
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   SafeAreaView,
   StyleSheet,
@@ -34,15 +34,16 @@ const CartScreen = () => {
     undefined,
   );
 
+  useEffect(() => {
+    edittingProduct
+      ? bottomSheetModalRef.current?.present()
+      : bottomSheetModalRef.current?.close();
+  }, [edittingProduct]);
+
   const dispatch = useAppDispatch();
 
   const bottomSheetModalRef: React.RefObject<BottomSheetModal> =
     useRef<BottomSheetModal>(null);
-
-  const showBottomSheet = (product: Product) => {
-    bottomSheetModalRef.current?.present();
-    setEdittingProduct(product);
-  };
 
   const totalAmount = useMemo(() => {
     return cart
@@ -67,7 +68,7 @@ const CartScreen = () => {
           <Text style={styles.title}>Shopping Cart</Text>
           <CartList
             style={styles.cartList}
-            onProductPressed={product => showBottomSheet(product)}
+            onProductPressed={product => setEdittingProduct(product)}
           />
           <View style={styles.bottomContainer}>
             <View style={styles.totalAmountContainer}>
@@ -91,7 +92,7 @@ const CartScreen = () => {
                     newQuantity: quantity,
                   }),
                 );
-                bottomSheetModalRef.current?.dismiss();
+                setEdittingProduct(undefined);
               }}
             />
           ) : (
