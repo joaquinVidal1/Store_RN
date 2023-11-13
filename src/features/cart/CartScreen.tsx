@@ -2,6 +2,7 @@ import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
+  Platform,
   SafeAreaView,
   StyleSheet,
   Text,
@@ -21,6 +22,7 @@ import {colors} from '../shared/colors';
 import ProductBottomSheet from './components/BottomSheet';
 import CartList from './components/CartList';
 import ConfirmationButton from './components/ConfirmationButton';
+import EdditingDialog from './components/EdditingDialog';
 
 export const MARGIN_HORIZONTAL = 18;
 export const MARGIN_BETWEEN_COLUMNS = 12;
@@ -40,10 +42,24 @@ const CartScreen = () => {
       : bottomSheetModalRef.current?.close();
   }, [edittingProduct]);
 
+  const showModal = useMemo(() => {
+    return edittingProduct !== undefined;
+  }, [edittingProduct]);
+
   const dispatch = useAppDispatch();
 
   const bottomSheetModalRef: React.RefObject<BottomSheetModal> =
     useRef<BottomSheetModal>(null);
+
+  const onConfirmEdittion = (productId: number, quantity: number) => {
+    dispatch(
+      editQuantity({
+        prodctId: productId,
+        newQuantity: quantity,
+      }),
+    );
+    setEdittingProduct(undefined);
+  };
 
   const totalAmount = useMemo(() => {
     return cart
@@ -82,19 +98,25 @@ const CartScreen = () => {
             />
           </View>
           {edittingProduct ? (
-            <ProductBottomSheet
-              product={edittingProduct}
-              reference={bottomSheetModalRef}
-              onConfirmEdittion={quantity => {
-                dispatch(
-                  editQuantity({
-                    prodctId: edittingProduct.id,
-                    newQuantity: quantity,
-                  }),
-                );
-                setEdittingProduct(undefined);
-              }}
-            />
+            Platform.OS === 'ios' ? (
+              <ProductBottomSheet
+                product={edittingProduct}
+                reference={bottomSheetModalRef}
+                onDismiss={() => setEdittingProduct(undefined)}
+                onConfirmEdittion={quantity => {
+                  onConfirmEdittion(edittingProduct.id, quantity);
+                }}
+              />
+            ) : (
+              <EdditingDialog
+                product={edittingProduct}
+                onConfirmEdittion={quantity => {
+                  onConfirmEdittion(edittingProduct.id, quantity);
+                }}
+                showModal={showModal}
+                onDismiss={() => setEdittingProduct(undefined)}
+              />
+            )
           ) : (
             <></>
           )}
