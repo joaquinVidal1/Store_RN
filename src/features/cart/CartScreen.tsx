@@ -32,7 +32,7 @@ export const IMAGE_SIZE = 150;
 
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const cart = useAppSelector(state => state.persistReducer.cart.cart);
+  const cart = useAppSelector(state => state.cart.cart);
   const {data: products} = useProducts();
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,
@@ -62,6 +62,19 @@ const CartScreen = () => {
       }),
     );
     setEdittingProduct(undefined);
+  };
+
+  const onConfirmPurchase = () => {
+    mutate(cart, {
+      onSuccess: () => {
+        Toast.show('success', 3);
+        dispatch(cleanCart());
+        navigation.goBack();
+      },
+      onError: () => {
+        Toast.show('error, please try again', 3);
+      },
+    });
   };
 
   const totalAmount = useMemo(() => {
@@ -95,18 +108,7 @@ const CartScreen = () => {
               <Text style={styles.totalAmount}>{'$' + totalAmount}</Text>
             </View>
             <ConfirmationButton
-              onPress={() => {
-                mutate(cart, {
-                  onSuccess: () => {
-                    Toast.show('success', 3);
-                    dispatch(cleanCart());
-                    navigation.goBack();
-                  },
-                  onError: () => {
-                    Toast.show('error, please try again', 3);
-                  },
-                });
-              }}
+              onPress={onConfirmPurchase}
               text="Checkout"
               style={styles.buttonColor}
             />
