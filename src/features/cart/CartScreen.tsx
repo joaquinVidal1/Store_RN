@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import ArrowBack from '../../../res/arrow_back.svg';
 import {NavigationProp} from '../../application/App';
 import {cleanCart, editQuantity} from '../../infrastructure/store/cartSlice';
@@ -23,6 +24,7 @@ import ProductBottomSheet from './components/BottomSheet';
 import CartList from './components/CartList';
 import ConfirmationButton from './components/ConfirmationButton';
 import EdditingDialog from './components/EdditingDialog';
+import {useCheckoutMutation} from './queries';
 
 export const MARGIN_HORIZONTAL = 18;
 export const MARGIN_BETWEEN_COLUMNS = 12;
@@ -35,6 +37,7 @@ const CartScreen = () => {
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,
   );
+  const {mutate} = useCheckoutMutation();
 
   useEffect(() => {
     edittingProduct
@@ -93,8 +96,16 @@ const CartScreen = () => {
             </View>
             <ConfirmationButton
               onPress={() => {
-                dispatch(cleanCart());
-                navigation.goBack();
+                mutate(cart, {
+                  onSuccess: () => {
+                    Toast.show('success', 3);
+                    dispatch(cleanCart());
+                    navigation.goBack();
+                  },
+                  onError: () => {
+                    Toast.show('error, please try again', 3);
+                  },
+                });
               }}
               text="Checkout"
               style={styles.buttonColor}
