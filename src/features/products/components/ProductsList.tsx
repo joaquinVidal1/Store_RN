@@ -1,7 +1,7 @@
 import React, {useMemo} from 'react';
 import {
   ActivityIndicator,
-  FlatList,
+  SectionList,
   StyleSheet,
   Text,
   View,
@@ -27,6 +27,11 @@ export interface Product {
   checkoutImageUrl: string;
   listImageUrl: string;
   quantity: number;
+}
+
+interface Section {
+  title: string;
+  data: Product[];
 }
 
 export const ProductsList = ({query}: {query: string}) => {
@@ -76,25 +81,24 @@ export const ProductsList = ({query}: {query: string}) => {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        // bounces={false}
+      <SectionList
+        stickySectionHeadersEnabled={false}
         style={styles.flatList}
-        data={displayList}
+        sections={displayList}
         ItemSeparatorComponent={productsSeparator}
         keyExtractor={(item, index) =>
           typeof item === 'string' ? `category-${index}` : item.id.toString()
         }
-        renderItem={item => {
-          return typeof item.item === 'string' ? (
-            <HeaderListItem header={item.item} />
-          ) : (
-            <ProductListItem
-              product={item.item}
-              onAddProduct={onAddProduct}
-              onRemoveProduct={onRemoveProduct}
-            />
-          );
-        }}
+        renderItem={item => (
+          <ProductListItem
+            product={item.item}
+            onAddProduct={onAddProduct}
+            onRemoveProduct={onRemoveProduct}
+          />
+        )}
+        renderSectionHeader={({section: {title}}) => (
+          <HeaderListItem header={title} />
+        )}
       />
     </View>
   );
@@ -106,25 +110,26 @@ const productsSeparator = () => {
   );
 };
 
-function sortAndGroupProductsByCategory(
-  products: Product[],
-): (Product | string)[] {
+function sortAndGroupProductsByCategory(products: Product[]): Section[] {
   const sortedProducts = products.sort((a, b) =>
     a.category.localeCompare(b.category),
   );
 
-  const groupedProducts = [];
+  const sections: Section[] = [];
   let currentCategory = '';
 
   for (const product of sortedProducts) {
     if (currentCategory !== product.category) {
       currentCategory = product.category;
-      groupedProducts.push(currentCategory);
+      sections.push({title: currentCategory, data: [product]});
+    } else {
+      sections
+        .find(section => section.title === currentCategory)
+        ?.data.push(product);
     }
-    groupedProducts.push(product);
   }
 
-  return groupedProducts;
+  return sections;
 }
 
 const styles = StyleSheet.create({
