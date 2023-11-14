@@ -1,67 +1,19 @@
-import React, {useMemo} from 'react';
-import {
-  ActivityIndicator,
-  SectionList,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import React from 'react';
+import {SectionList, StyleSheet, View} from 'react-native';
 import {
   decrementQuantity,
   incrementQuantity,
 } from '../../../infrastructure/store/cartSlice';
-import {
-  useAppDispatch,
-  useAppSelector,
-} from '../../../infrastructure/store/hooks/hooks';
+import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
-import {useProducts} from '../queries';
+import {useDisplayList} from '../hooks/useDisplayList';
+import {Product} from '../types/Product';
 import HeaderListItem from './HeaderListItem';
 import ProductListItem from './ProductListItem';
 
-export interface Product {
-  id: number;
-  name: string;
-  price: number;
-  category: string;
-  checkoutImageUrl: string;
-  listImageUrl: string;
-  quantity: number;
-}
-
-interface Section {
-  title: string;
-  data: Product[];
-}
-
 export const ProductsList = ({query}: {query: string}) => {
-  const {data: apiAproducts} = useProducts();
-  const {cart, error, loading} = useAppSelector(
-    state => state.persistReducer.cart,
-  );
-
-  const displayList = useMemo(() => {
-    return apiAproducts
-      ? sortAndGroupProductsByCategory(
-          apiAproducts
-            ?.filter(product => {
-              return query.length !== 0
-                ? product.category.includes(query) ||
-                    product.name.includes(query)
-                : true;
-            })
-            .map(product => {
-              const cartItem = cart.find(it => it.id === product.id);
-              return {
-                ...product,
-                quantity: cartItem ? cartItem.quantity : 0,
-              };
-            }),
-        )
-      : [];
-  }, [apiAproducts, cart, query]);
-
   const dispatch = useAppDispatch();
+  const displayList = useDisplayList(query);
 
   const onAddProduct = (product: Product) => {
     dispatch(incrementQuantity(product.id));
@@ -70,14 +22,6 @@ export const ProductsList = ({query}: {query: string}) => {
   const onRemoveProduct = (product: Product) => {
     dispatch(decrementQuantity(product.id));
   };
-
-  if (loading) {
-    return <ActivityIndicator size={'large'} />;
-  }
-
-  if (error) {
-    return <Text>{error}</Text>;
-  }
 
   return (
     <View style={styles.container}>
@@ -109,28 +53,6 @@ const productsSeparator = () => {
     <View style={{height: 1, width: '90%', backgroundColor: colors.gray}} />
   );
 };
-
-function sortAndGroupProductsByCategory(products: Product[]): Section[] {
-  const sortedProducts = products.sort((a, b) =>
-    a.category.localeCompare(b.category),
-  );
-
-  const sections: Section[] = [];
-  let currentCategory = '';
-
-  for (const product of sortedProducts) {
-    if (currentCategory !== product.category) {
-      currentCategory = product.category;
-      sections.push({title: currentCategory, data: [product]});
-    } else {
-      sections
-        .find(section => section.title === currentCategory)
-        ?.data.push(product);
-    }
-  }
-
-  return sections;
-}
 
 const styles = StyleSheet.create({
   productContainer: {
