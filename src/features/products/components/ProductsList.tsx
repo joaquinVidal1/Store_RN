@@ -31,9 +31,7 @@ export interface Product {
 
 export const ProductsList = ({query}: {query: string}) => {
   const {data: apiAproducts} = useProducts();
-  const {cart, error, loading} = useAppSelector(
-    state => state.persistReducer.cart,
-  );
+  const {cart, error, loading} = useAppSelector(state => state.cart);
 
   const displayList = useMemo(() => {
     return apiAproducts
