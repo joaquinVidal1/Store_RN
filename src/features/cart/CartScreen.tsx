@@ -30,7 +30,7 @@ export const IMAGE_SIZE = 150;
 
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const cart = useAppSelector(state => state.cart.cart);
+  const cart = useAppSelector(state => state.persistReducer.cart.cart);
   const {data: products} = useProducts();
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,
