@@ -59,7 +59,6 @@ export const ProductsList = ({query}: {query: string}) => {
   const dispatch = useAppDispatch();
 
   const onAddProduct = (product: Product) => {
-    console.log('onAddProduct. Product: ', product);
     dispatch(incrementQuantity(product.id));
   };
 
@@ -140,7 +139,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // backgroundColor: colors.backgroundColor,
     backgroundColor: 'red',
   },
 });

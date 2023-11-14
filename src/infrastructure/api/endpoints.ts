@@ -20,7 +20,6 @@ export const getProducts = (): Promise<ApiProduct[]> => {
       }
     })
     .catch(error => {
-      console.log('entro error');
       console.log(error);
       throw error;
     });
@@ -44,7 +43,6 @@ export const getBanners = (): Promise<Banner[]> => {
       }
     })
     .catch(error => {
-      console.log('entro error');
       console.log(error);
       throw error;
     });
