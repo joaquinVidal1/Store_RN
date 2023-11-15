@@ -1,3 +1,4 @@
+import {Purchase} from '../../features/purchases/types/Purchase';
 import {CartProduct} from '../store/cartSlice';
 import {instance} from './instance';
 
@@ -44,7 +45,7 @@ export const makeCheckout = (cart: CartProduct[]) => {
     });
 };
 
-export const getPurchases = () => {
+export const getPurchases = (): Promise<Purchase[]> => {
   return instance
     .get('/purchases')
     .then(response => {

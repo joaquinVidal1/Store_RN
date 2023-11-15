@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
   },
   cartButton: {
     marginEnd: 29,
-    marginVertical: 16,
+    marginBottom: 16,
     alignSelf: 'flex-end',
   },
   searchBar: {

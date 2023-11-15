@@ -67,8 +67,8 @@ function App(): JSX.Element {
     <NavigationContainer>
       <AppNavigator.Navigator
         screenOptions={{sceneContainerStyle: backgroundStyle}}>
-        <AppNavigator.Screen name="Store" component={StoreFlow} />
-        <AppNavigator.Screen name="Purchases" component={PurchasesFlow} />
+        <AppNavigator.Screen name="StoreFlow" component={StoreFlow} />
+        <AppNavigator.Screen name="PurchasesFlow" component={PurchasesFlow} />
       </AppNavigator.Navigator>
     </NavigationContainer>
   );
