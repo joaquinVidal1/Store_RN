@@ -1,3 +1,4 @@
+import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   createNativeStackNavigator,
@@ -12,6 +13,7 @@ import {Provider} from 'react-redux';
 import {PersistGate} from 'redux-persist/integration/react';
 import CartScreen from '../features/cart/CartScreen';
 import ProductsScreen from '../features/products/ProductsScreen';
+import PurchasesScreen from '../features/purchases/PurchasesScreen';
 import {colors} from '../features/shared/colors';
 import {QueryProvider} from '../infrastructure/query';
 import store, {persistor} from '../infrastructure/store/store';
@@ -21,8 +23,32 @@ type AppStackParamList = {
   Cart: undefined;
 };
 
+type PurchasesParamList = {
+  Purchases: undefined;
+};
+
+const StoreNavigator = createNativeStackNavigator<AppStackParamList>();
+const PurchasesNavigator = createNativeStackNavigator<PurchasesParamList>();
+const AppNavigator = createDrawerNavigator();
+
+const StoreFlow = () => {
+  return (
+    <StoreNavigator.Navigator screenOptions={{headerShown: false}}>
+      <StoreNavigator.Screen name="Products" component={ProductsScreen} />
+      <StoreNavigator.Screen name="Cart" component={CartScreen} />
+    </StoreNavigator.Navigator>
+  );
+};
+
+const PurchasesFlow = () => {
+  return (
+    <PurchasesNavigator.Navigator screenOptions={{headerShown: false}}>
+      <PurchasesNavigator.Screen name="Purchases" component={PurchasesScreen} />
+    </PurchasesNavigator.Navigator>
+  );
+};
+
 export type NavigationProp = NativeStackNavigationProp<AppStackParamList>;
-const appNavigator = createNativeStackNavigator<AppStackParamList>();
 
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -33,11 +59,11 @@ function App(): JSX.Element {
 
   return (
     <NavigationContainer>
-      <appNavigator.Navigator
-        screenOptions={{headerShown: false, contentStyle: backgroundStyle}}>
-        <appNavigator.Screen name="Products" component={ProductsScreen} />
-        <appNavigator.Screen name="Cart" component={CartScreen} />
-      </appNavigator.Navigator>
+      <AppNavigator.Navigator
+        screenOptions={{sceneContainerStyle: backgroundStyle}}>
+        <AppNavigator.Screen name="Store" component={StoreFlow} />
+        <AppNavigator.Screen name="Purchases" component={PurchasesFlow} />
+      </AppNavigator.Navigator>
     </NavigationContainer>
   );
 }
