@@ -44,6 +44,22 @@ export const makeCheckout = (cart: CartProduct[]) => {
     });
 };
 
+export const getPurchases = () => {
+  return instance
+    .get('/purchases')
+    .then(response => {
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error('Error fetching products');
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      throw error;
+    });
+};
+
 export interface Banner {
   id: number;
   name: string;
