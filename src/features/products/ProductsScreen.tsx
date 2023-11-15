@@ -11,9 +11,7 @@ import {ProductsList} from './components/ProductsList';
 import SearchBar from './components/SearchBar';
 
 const ProductsScreen = () => {
-  const isEmpty = useAppSelector(
-    state => state.persistReducer.cart.cart.length === 0,
-  );
+  const isEmpty = useAppSelector(state => state.cart.cart.length === 0);
   const [query, setQuery] = useState('');
   const navigation = useNavigation<NavigationProp>();
 
