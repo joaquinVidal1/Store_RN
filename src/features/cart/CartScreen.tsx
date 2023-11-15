@@ -17,8 +17,8 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../infrastructure/store/hooks/hooks';
-import {Product} from '../products/components/ProductsList';
 import {useProducts} from '../products/queries';
+import {Product} from '../products/types/Product';
 import {colors} from '../shared/colors';
 import ProductBottomSheet from './components/BottomSheet';
 import CartList from './components/CartList';
@@ -32,7 +32,7 @@ export const IMAGE_SIZE = 150;
 
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const cart = useAppSelector(state => state.cart.cart);
+  const cart = useAppSelector(state => state.persistReducer.cart.cart);
   const {data: products} = useProducts();
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,

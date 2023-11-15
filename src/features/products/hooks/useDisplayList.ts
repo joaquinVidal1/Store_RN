@@ -10,7 +10,7 @@ interface Section {
 
 export const useDisplayList = (query: string) => {
   const {data: apiAproducts} = useProducts();
-  const {cart} = useAppSelector(state => state.cart);
+  const {cart} = useAppSelector(state => state.persistReducer.cart);
 
   return useMemo(() => {
     return apiAproducts
