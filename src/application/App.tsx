@@ -4,15 +4,17 @@ import {
   NativeStackNavigationProp,
 } from '@react-navigation/native-stack';
 import React from 'react';
-import {useColorScheme} from 'react-native';
+import {Text, useColorScheme} from 'react-native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 import CartScreen from '../features/cart/CartScreen';
 import ProductsScreen from '../features/products/ProductsScreen';
 import {colors} from '../features/shared/colors';
 import {QueryProvider} from '../infrastructure/query';
-import store from '../infrastructure/store/store';
+import store, {persistor} from '../infrastructure/store/store';
 
 type AppStackParamList = {
   Products: undefined;
@@ -42,12 +44,16 @@ function App(): JSX.Element {
 
 export default () => {
   return (
-    <QueryProvider>
-      <Provider store={store}>
-        <SafeAreaProvider>
-          <App />
-        </SafeAreaProvider>
-      </Provider>
-    </QueryProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <QueryProvider>
+        <Provider store={store}>
+          <PersistGate loading={<Text>Loading...</Text>} persistor={persistor}>
+            <SafeAreaProvider>
+              <App />
+            </SafeAreaProvider>
+          </PersistGate>
+        </Provider>
+      </QueryProvider>
+    </GestureHandlerRootView>
   );
 };

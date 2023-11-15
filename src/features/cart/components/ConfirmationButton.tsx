@@ -1,20 +1,19 @@
 import React from 'react';
-import {ColorValue, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleProps} from 'react-native-reanimated';
 import {colors} from '../../shared/colors';
 
 const ConfirmationButton = ({
   onPress,
   text,
-  color,
+  style,
 }: {
   onPress: () => void;
   text: string;
-  color: ColorValue;
+  style: StyleProps;
 }) => {
   return (
-    <TouchableOpacity
-      onPress={onPress}
-      style={[styles.fab, {backgroundColor: color}]}>
+    <TouchableOpacity onPress={onPress} style={[styles.fab, style]}>
       <Text style={styles.text}>{text}</Text>
     </TouchableOpacity>
   );
@@ -23,12 +22,10 @@ const ConfirmationButton = ({
 const styles = StyleSheet.create({
   fab: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignSelf: 'stretch',
     justifyContent: 'center',
     padding: 16,
     borderRadius: 50,
-    elevation: 4,
-    width: '100%',
   },
   text: {
     fontSize: 16,

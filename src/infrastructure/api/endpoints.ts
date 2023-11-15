@@ -1,3 +1,4 @@
+import {CartProduct} from '../store/cartSlice';
 import {instance} from './instance';
 
 export interface ApiProduct {
@@ -20,8 +21,25 @@ export const getProducts = (): Promise<ApiProduct[]> => {
       }
     })
     .catch(error => {
-      console.log('entro error');
       console.log(error);
+      throw error;
+    });
+};
+
+export const makeCheckout = (cart: CartProduct[]) => {
+  return instance
+    .post('/checkout', {
+      cart: cart.map(cartItem => {
+        return {
+          quantity: cartItem.quantity,
+          product_id: cartItem.id,
+        };
+      }),
+    })
+    .then(response => {
+      return response.data;
+    })
+    .catch(error => {
       throw error;
     });
 };
@@ -44,7 +62,6 @@ export const getBanners = (): Promise<Banner[]> => {
       }
     })
     .catch(error => {
-      console.log('entro error');
       console.log(error);
       throw error;
     });

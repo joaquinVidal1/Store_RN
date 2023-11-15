@@ -1,25 +1,18 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {
-  decrementQuantity,
-  incrementQuantity,
-} from '../../../infrastructure/store/cartSlice';
-import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
 import AddButton from './AddButton';
 import {Product} from './ProductsList';
 
-const ProductListItem = ({product}: {product: Product}) => {
-  const dispatch = useAppDispatch();
-
-  const onAddProduct = () => {
-    dispatch(incrementQuantity(product.id));
-  };
-
-  const onRemoveProduct = () => {
-    dispatch(decrementQuantity(product.id));
-  };
-
+const ProductListItem = ({
+  product,
+  onAddProduct,
+  onRemoveProduct,
+}: {
+  product: Product;
+  onAddProduct: (product: Product) => void;
+  onRemoveProduct: (product: Product) => void;
+}) => {
   return (
     <View style={styles.container}>
       <View style={{flexDirection: 'row'}}>
@@ -35,8 +28,8 @@ const ProductListItem = ({product}: {product: Product}) => {
       </View>
       <AddButton
         quantity={product.quantity}
-        onAddProduct={onAddProduct}
-        onRemoveProduct={onRemoveProduct}
+        onAddProduct={() => onAddProduct(product)}
+        onRemoveProduct={() => onRemoveProduct(product)}
       />
     </View>
   );
@@ -49,6 +42,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 18,
     paddingVertical: 16,
     justifyContent: 'space-between',
+    width: '100%',
   },
   productImage: {
     width: 56,
