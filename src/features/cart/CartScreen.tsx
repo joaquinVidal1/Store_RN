@@ -32,7 +32,7 @@ export const IMAGE_SIZE = 150;
 
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const cart = useAppSelector(state => state.cart.cart);
+  const cart = useAppSelector(state => state.persistReducer.cart.cart);
   const {data: products} = useProducts();
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,
@@ -43,10 +43,6 @@ const CartScreen = () => {
     edittingProduct
       ? bottomSheetModalRef.current?.present()
       : bottomSheetModalRef.current?.close();
-  }, [edittingProduct]);
-
-  const showModal = useMemo(() => {
-    return edittingProduct !== undefined;
   }, [edittingProduct]);
 
   const dispatch = useAppDispatch();
@@ -129,7 +125,7 @@ const CartScreen = () => {
                 onConfirmEdittion={quantity => {
                   onConfirmEdittion(edittingProduct.id, quantity);
                 }}
-                showModal={showModal}
+                showModal={true}
                 onDismiss={() => setEdittingProduct(undefined)}
               />
             )
