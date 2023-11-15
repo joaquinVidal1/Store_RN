@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Toast from 'react-native-simple-toast';
 import ArrowBack from '../../../res/arrow_back.svg';
 import {NavigationProp} from '../../application/App';
 import {cleanCart, editQuantity} from '../../infrastructure/store/cartSlice';
@@ -23,6 +24,7 @@ import ProductBottomSheet from './components/BottomSheet';
 import CartList from './components/CartList';
 import ConfirmationButton from './components/ConfirmationButton';
 import EdditingDialog from './components/EdditingDialog';
+import {useCheckoutMutation} from './queries';
 
 export const MARGIN_HORIZONTAL = 18;
 export const MARGIN_BETWEEN_COLUMNS = 12;
@@ -30,11 +32,12 @@ export const IMAGE_SIZE = 150;
 
 const CartScreen = () => {
   const navigation = useNavigation<NavigationProp>();
-  const cart = useAppSelector(state => state.persistReducer.cart.cart);
+  const cart = useAppSelector(state => state.cart.cart);
   const {data: products} = useProducts();
   const [edittingProduct, setEdittingProduct] = useState<Product | undefined>(
     undefined,
   );
+  const {mutate} = useCheckoutMutation();
 
   useEffect(() => {
     edittingProduct
@@ -59,6 +62,19 @@ const CartScreen = () => {
       }),
     );
     setEdittingProduct(undefined);
+  };
+
+  const onConfirmPurchase = () => {
+    mutate(cart, {
+      onSuccess: () => {
+        Toast.show('success', 3);
+        dispatch(cleanCart());
+        navigation.goBack();
+      },
+      onError: () => {
+        Toast.show('error, please try again', 3);
+      },
+    });
   };
 
   const totalAmount = useMemo(() => {
@@ -92,10 +108,7 @@ const CartScreen = () => {
               <Text style={styles.totalAmount}>{'$' + totalAmount}</Text>
             </View>
             <ConfirmationButton
-              onPress={() => {
-                dispatch(cleanCart());
-                navigation.goBack();
-              }}
+              onPress={onConfirmPurchase}
               text="Checkout"
               style={styles.buttonColor}
             />

@@ -25,7 +25,7 @@ const CartList = ({
   const {data: apiProducts} = useProducts();
   const {width} = useWindowDimensions();
 
-  const cart = useAppSelector(state => state.persistReducer.cart.cart);
+  const cart = useAppSelector(state => state.cart.cart);
   const displayList: Product[] = useMemo(() => {
     return cart
       .map(cartItem => {

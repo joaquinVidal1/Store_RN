@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
-interface CartProduct {
+export interface CartProduct {
   id: number;
   quantity: number;
 }
@@ -28,7 +28,6 @@ const cartSlice = createSlice({
       } else {
         state.cart.push({id: action.payload, quantity: 1});
       }
-      console.log('onAddProduct. Cart: ', action.payload);
     },
     decrementQuantity(state, action: PayloadAction<number>) {
       const cartItem = state.cart.find(prod => prod.id === action.payload);
