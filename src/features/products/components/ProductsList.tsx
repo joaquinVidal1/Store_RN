@@ -6,6 +6,7 @@ import {
 } from '../../../infrastructure/store/cartSlice';
 import {useAppDispatch} from '../../../infrastructure/store/hooks/hooks';
 import {colors} from '../../shared/colors';
+import {productsSeparator} from '../../shared/components/ProductsSeparator';
 import {useDisplayList} from '../hooks/useDisplayList';
 import {Product} from '../types/Product';
 import HeaderListItem from './HeaderListItem';
@@ -45,12 +46,6 @@ export const ProductsList = ({query}: {query: string}) => {
         )}
       />
     </View>
-  );
-};
-
-const productsSeparator = () => {
-  return (
-    <View style={{height: 1, width: '90%', backgroundColor: colors.gray}} />
   );
 };
 

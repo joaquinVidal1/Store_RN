@@ -39,7 +39,10 @@ const StoreFlow = () => {
   };
   return (
     <StoreNavigator.Navigator
-      screenOptions={{headerShown: false, contentStyle: backgroundStyle}}>
+      screenOptions={{
+        headerShown: false,
+        contentStyle: backgroundStyle,
+      }}>
       <StoreNavigator.Screen name="Products" component={ProductsScreen} />
       <StoreNavigator.Screen name="Cart" component={CartScreen} />
     </StoreNavigator.Navigator>

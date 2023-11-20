@@ -23,7 +23,7 @@ const CartItem = ({
       <View style={styles.nameAndPriceContainer}>
         <Text style={styles.productName}>{product.name}</Text>
         <Text style={styles.productPrice}>
-          {'$' + product.price.toFixed(2)}
+          {'$' + product.price?.toFixed(2) || '0'}
         </Text>
       </View>
       <Text style={styles.units}>{product.quantity + ' units'}</Text>

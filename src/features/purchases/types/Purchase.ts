@@ -1,6 +1,6 @@
-import {Product} from '../../products/types/Product';
+import {ApiProduct} from '../../../infrastructure/api';
 
 export interface Purchase {
   date: string;
-  items: Product[];
+  items: {product: ApiProduct; quantity: number}[];
 }

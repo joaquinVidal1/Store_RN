@@ -27,7 +27,7 @@ const ProductsScreen = () => {
   );
 
   return (
-    <SafeAreaView style={{flex: 1}}>
+    <SafeAreaView edges={['right', 'bottom', 'left']} style={{flex: 1}}>
       <View style={styles.container}>
         <View style={styles.cartButton}>{cartImage}</View>
         <Carrousel />
