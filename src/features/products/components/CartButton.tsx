@@ -24,7 +24,6 @@ const CartButton = ({
 const styles = StyleSheet.create({
   cartButton: {
     marginEnd: 29,
-    marginBottom: 16,
   },
 });
 

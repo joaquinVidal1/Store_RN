@@ -1,16 +1,8 @@
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useMemo, useRef, useState} from 'react';
-import {
-  Platform,
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Platform, SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
-import ArrowBack from '../../../res/arrow_back.svg';
 import {NavigationProp} from '../../application/App';
 import {cleanCart, editQuantity} from '../../infrastructure/store/cartSlice';
 import {
@@ -90,13 +82,6 @@ const CartScreen = () => {
     <SafeAreaView>
       <BottomSheetModalProvider>
         <View style={styles.container}>
-          <TouchableOpacity
-            style={styles.iconBack}
-            onPress={() => {
-              navigation.goBack();
-            }}>
-            <ArrowBack />
-          </TouchableOpacity>
           <Text style={styles.title}>Shopping Cart</Text>
           <CartList
             style={styles.cartList}
@@ -146,10 +131,6 @@ const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     height: '100%',
-  },
-  iconBack: {
-    marginHorizontal: MARGIN_HORIZONTAL,
-    marginTop: 16,
   },
   title: {
     fontWeight: 'bold',
