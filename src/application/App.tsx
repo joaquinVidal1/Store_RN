@@ -74,19 +74,19 @@ function App(): JSX.Element {
         options={({navigation}) => {
           const state = navigation.getState();
 
-          // Encuentra el estado del StackNavigator anidado
           const stackState = state.routes.find(route => route.state)?.state;
           const currentScreen = stackState?.routes[stackState?.index]?.name;
 
           const isCartScreen = currentScreen === 'Cart';
 
           return {
-            headerRight: () => (
-              <CartButton
-                onPress={() => navigation.navigate('Cart')}
-                isEnabled={isCartEmpty}
-              />
-            ),
+            headerRight: () =>
+              !isCartScreen && (
+                <CartButton
+                  onPress={() => navigation.navigate('Cart')}
+                  isEnabled={isCartEmpty}
+                />
+              ),
             headerLeft: () =>
               isCartScreen ? (
                 <TouchableOpacity
