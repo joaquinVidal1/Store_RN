@@ -6,7 +6,6 @@ import {colors} from '../../shared/colors';
 import {Purchase} from '../types/Purchase';
 
 export const PurchaseListItem = ({purchase}: {purchase: Purchase}) => {
-  const newLocal = 'stretch';
   return (
     <View>
       <FlatList
@@ -14,11 +13,7 @@ export const PurchaseListItem = ({purchase}: {purchase: Purchase}) => {
         data={purchase.items.map(purchaseItem => {
           return {...purchaseItem.product, quantity: purchaseItem.quantity};
         })}
-        contentContainerStyle={{
-          paddingTop: 24,
-          alignItems: newLocal,
-          marginHorizontal: MARGIN_HORIZONTAL,
-        }}
+        contentContainerStyle={styles.contentContainer}
         renderItem={({item, index}) => (
           <CartItem
             product={item}
@@ -27,7 +22,6 @@ export const PurchaseListItem = ({purchase}: {purchase: Purchase}) => {
                 ? {marginEnd: MARGIN_BETWEEN_COLUMNS}
                 : {}
             }
-            onPress={() => {}}
           />
         )}
       />
@@ -40,5 +34,10 @@ const styles = StyleSheet.create({
     borderColor: colors.purple,
     marginBottom: 16,
     borderWidth: 2,
+  },
+  contentContainer: {
+    paddingTop: 24,
+    alignItems: 'stretch',
+    marginHorizontal: MARGIN_HORIZONTAL,
   },
 });

@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {
@@ -56,6 +55,43 @@ const PurchasesFlow = () => {
 
 export type NavigationProp = NativeStackNavigationProp<AppStackParamList>;
 
+const StoreFlowNavigationOptions = ({navigation}) => {
+  const state = navigation.getState();
+  const isCartEmpty = useAppSelector(state => state.cart.cart.length === 0);
+
+  const stackState = state.routes.find(route => route.state)?.state;
+  const currentScreen = stackState?.routes[stackState?.index]?.name;
+  console.log('currentScreen: ', currentScreen);
+  const isCartScreen = currentScreen === 'Cart';
+  return {
+    headerRight: () =>
+      !isCartScreen && (
+        <CartButton
+          onPress={() => navigation.navigate('Cart')}
+          isEnabled={isCartEmpty}
+        />
+      ),
+    headerLeft: () =>
+      isCartScreen ? (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <ArrowBack />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={styles.headerButton}
+          onPress={() => {
+            navigation.openDrawer();
+          }}>
+          <MenuIcon color={colors.primaryColor} />
+        </TouchableOpacity>
+      ),
+  };
+};
+
 function App(): JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
 
@@ -63,50 +99,13 @@ function App(): JSX.Element {
     backgroundColor: isDarkMode ? Colors.darker : colors.backgroundColor,
   };
 
-  const isCartEmpty = useAppSelector(state => state.cart.cart.length === 0);
-
   return (
     <AppNavigator.Navigator
       screenOptions={{sceneContainerStyle: backgroundStyle}}>
       <AppNavigator.Screen
         name="StoreFlow"
         component={StoreFlow}
-        options={({navigation}) => {
-          const state = navigation.getState();
-
-          const stackState = state.routes.find(route => route.state)?.state;
-          const currentScreen = stackState?.routes[stackState?.index]?.name;
-
-          const isCartScreen = currentScreen === 'Cart';
-
-          return {
-            headerRight: () =>
-              !isCartScreen && (
-                <CartButton
-                  onPress={() => navigation.navigate('Cart')}
-                  isEnabled={isCartEmpty}
-                />
-              ),
-            headerLeft: () =>
-              isCartScreen ? (
-                <TouchableOpacity
-                  style={styles.headerButton}
-                  onPress={() => {
-                    navigation.goBack();
-                  }}>
-                  <ArrowBack />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.headerButton}
-                  onPress={() => {
-                    navigation.openDrawer();
-                  }}>
-                  <MenuIcon color={colors.primaryColor} />
-                </TouchableOpacity>
-              ),
-          };
-        }}
+        options={StoreFlowNavigationOptions}
       />
       <AppNavigator.Screen name="PurchasesFlow" component={PurchasesFlow} />
     </AppNavigator.Navigator>

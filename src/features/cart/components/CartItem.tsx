@@ -4,15 +4,13 @@ import {StyleProps} from 'react-native-reanimated';
 import {Product} from '../../products/components/ProductsList';
 import {colors} from '../../shared/colors';
 
-const CartItem = ({
-  product,
-  style,
-  onPress,
-}: {
+export type Props = {
   product: Product;
   style: StyleProps;
-  onPress: () => void;
-}) => {
+  onPress?: () => void;
+};
+
+const CartItem: React.FC<Props> = ({product, style, onPress}) => {
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Image
