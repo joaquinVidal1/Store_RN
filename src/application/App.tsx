@@ -36,23 +36,15 @@ const StoreNavigator = createNativeStackNavigator<AppStackParamList>();
 const PurchasesNavigator = createNativeStackNavigator<PurchasesParamList>();
 const AppNavigator = createDrawerNavigator();
 
-const StoreFlow = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : colors.backgroundColor,
-  };
-  return (
-    <StoreNavigator.Navigator
-      screenOptions={{
-        headerShown: false,
-        contentStyle: backgroundStyle,
-      }}>
-      <StoreNavigator.Screen name="Products" component={ProductsScreen} />
-      <StoreNavigator.Screen name="Cart" component={CartScreen} />
-    </StoreNavigator.Navigator>
-  );
-};
+const StoreFlow = () => (
+  <StoreNavigator.Navigator
+    screenOptions={{
+      headerShown: false,
+    }}>
+    <StoreNavigator.Screen name="Products" component={ProductsScreen} />
+    <StoreNavigator.Screen name="Cart" component={CartScreen} />
+  </StoreNavigator.Navigator>
+);
 
 const PurchasesFlow = () => {
   return (
