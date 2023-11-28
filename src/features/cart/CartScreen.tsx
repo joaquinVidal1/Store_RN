@@ -30,11 +30,15 @@ const CartScreen = () => {
     undefined,
   );
   const {mutate} = useCheckoutMutation();
+  const [showPrev, setShowPrev] = useState<boolean>(false);
 
   useEffect(() => {
-    edittingProduct
-      ? bottomSheetModalRef.current?.present()
-      : bottomSheetModalRef.current?.close();
+    if (edittingProduct) {
+      bottomSheetModalRef.current?.present();
+      setShowPrev(true);
+    } else {
+      bottomSheetModalRef.current?.close();
+    }
   }, [edittingProduct]);
 
   const showModal = useMemo(() => {
@@ -86,6 +90,8 @@ const CartScreen = () => {
           <CartList
             style={styles.cartList}
             onProductPressed={product => setEdittingProduct(product)}
+            showPrev={showPrev}
+            setShowPrev={setShowPrev}
           />
           <View style={styles.bottomContainer}>
             <View style={styles.totalAmountContainer}>

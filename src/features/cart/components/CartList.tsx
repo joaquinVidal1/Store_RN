@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import {StyleProps} from 'react-native-reanimated';
 import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
-import {Product} from '../../products/components/ProductsList';
 import {useProducts} from '../../products/queries';
+import {Product} from '../../products/types/Product';
 import {
   IMAGE_SIZE,
   MARGIN_BETWEEN_COLUMNS,
@@ -24,34 +24,45 @@ const RowsSeparator = () => {
 const CartList = ({
   style,
   onProductPressed,
+  showPrev,
+  setShowPrev,
 }: {
   style: StyleProps;
   onProductPressed: (product: Product) => void;
+  showPrev: boolean;
+  setShowPrev: (arg0: boolean) => void;
 }) => {
   const {data: apiProducts} = useProducts();
   const cart = useAppSelector(state => state.cart.cart);
   const {width} = useWindowDimensions();
-  const [showPrev, setShowPrev] = useState<boolean>(false);
-
-  const [prevList, setPrevList] = useState<Product[]>(cart);
 
   const explote = useCallback(async () => {
     const deletedItems = prevList.filter(
       prevItem => !cart.some(currentItem => currentItem.id === prevItem.id),
     );
 
-    deletedItems.forEach(async product => {
+    const promises = deletedItems.map(async product => {
       const itemIndex = displayList.findIndex(item => item.id === product.id);
       console.log('cart', cart);
       console.log('itemIndex: ', itemIndex);
       console.log('displayList: ', displayList);
-      await onExplode(() => setPrevList(displayList), itemIndex);
+      await onExplode(itemIndex);
     });
+
+    if (promises && promises.length > 0) {
+      Promise.all(promises).then(() => setShowPrev(false));
+      setPrevList(displayList);
+    } else {
+      setShowPrev(false);
+      setPrevList(displayList);
+    }
   }, [cart]);
 
   useEffect(() => {
     explote();
   }, [explote]);
+
+  const [prevList, setPrevList] = useState<Product[]>([]);
 
   const displayList: Product[] = useMemo(() => {
     return showPrev
@@ -75,25 +86,25 @@ const CartList = ({
     [displayList],
   );
 
-  const onExplode = async (callback: () => void, index: number) => {
+  const onExplode = async (index: number) => {
     console.log('onExplode for index: ', index);
-    Animated.sequence([
-      Animated.timing(scaleValues[index], {
-        toValue: 1.5,
-        duration: 300,
-        useNativeDriver: true,
+    return new Promise<void>(resolve =>
+      Animated.sequence([
+        Animated.timing(scaleValues[index], {
+          toValue: 1.5,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+        Animated.timing(scaleValues[index], {
+          toValue: 0,
+          duration: 300,
+          useNativeDriver: true,
+        }),
+      ]).start(() => {
+        console.log('onExplodeFinished');
+        resolve();
       }),
-      Animated.timing(scaleValues[index], {
-        toValue: 0,
-        duration: 300,
-        useNativeDriver: true,
-      }),
-    ]).start(() => {
-      console.log('onExplodeFinished');
-      // callback();
-      setShowPrev(false);
-      callback();
-    });
+    );
   };
 
   const numColumns = Math.floor(
@@ -116,7 +127,7 @@ const CartList = ({
             product={item}
             style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
             onPress={() => {
-              setShowPrev(true);
+              setPrevList(displayList);
               onProductPressed(item);
             }}
           />
