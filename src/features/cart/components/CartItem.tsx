@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
   container: {
     minWidth: 150,
     flex: 1,
-    maxWidth: 180,
+    // maxWidth: 180,
   },
   iamge: {
     flex: 1,

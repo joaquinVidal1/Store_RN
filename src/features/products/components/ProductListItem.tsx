@@ -1,5 +1,12 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withSequence,
+  withTiming,
+} from 'react-native-reanimated';
 import {colors} from '../../shared/colors';
 import AddButton from './AddButton';
 import {Product} from './ProductsList';
@@ -13,8 +20,25 @@ const ProductListItem = ({
   onAddProduct: (product: Product) => void;
   onRemoveProduct: (product: Product) => void;
 }) => {
+  const offset = useSharedValue(0);
+
+  const animatedStyles = useAnimatedStyle(() => ({
+    transform: [{translateX: offset.value}],
+  }));
+
+  const handlePress = () => {
+    offset.value = withSequence(
+      withTiming(-OFFSET, {duration: TIME / 2}),
+      withRepeat(withTiming(OFFSET, {duration: TIME}), 5, true),
+      withTiming(0, {duration: TIME / 2}),
+    );
+  };
+
+  const OFFSET = 40;
+  const TIME = 250;
+
   return (
-    <View style={styles.container}>
+    <Animated.View style={[styles.container, animatedStyles]}>
       <View style={{flexDirection: 'row'}}>
         <Image
           source={{uri: product.listImageUrl}}
@@ -28,10 +52,16 @@ const ProductListItem = ({
       </View>
       <AddButton
         quantity={product.quantity}
-        onAddProduct={() => onAddProduct(product)}
-        onRemoveProduct={() => onRemoveProduct(product)}
+        onAddProduct={() => {
+          handlePress();
+          onAddProduct(product);
+        }}
+        onRemoveProduct={() => {
+          handlePress();
+          onRemoveProduct(product);
+        }}
       />
-    </View>
+    </Animated.View>
   );
 };
 

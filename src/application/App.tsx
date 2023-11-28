@@ -39,6 +39,7 @@ const StoreFlow = () => (
   <StoreNavigator.Navigator
     screenOptions={{
       headerShown: false,
+      contentStyle: {backgroundColor: colors.backgroundColor},
     }}>
     <StoreNavigator.Screen name="Products" component={ProductsScreen} />
     <StoreNavigator.Screen name="Cart" component={CartScreen} />
@@ -47,7 +48,11 @@ const StoreFlow = () => (
 
 const PurchasesFlow = () => {
   return (
-    <PurchasesNavigator.Navigator screenOptions={{headerShown: false}}>
+    <PurchasesNavigator.Navigator
+      screenOptions={{
+        headerShown: false,
+        contentStyle: {backgroundColor: colors.backgroundColor},
+      }}>
       <PurchasesNavigator.Screen name="Purchases" component={PurchasesScreen} />
     </PurchasesNavigator.Navigator>
   );
