@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StyleProps} from 'react-native-reanimated';
-import {Product} from '../../products/components/ProductsList';
+import {Product} from '../../products/types/Product';
 import {colors} from '../../shared/colors';
 
 export type Props = {
@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     minWidth: 150,
     flex: 1,
-    // maxWidth: 180,
   },
   iamge: {
     flex: 1,

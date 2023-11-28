@@ -115,13 +115,15 @@ const CartList = ({
       data={displayList}
       contentContainerStyle={{
         paddingTop: 24,
-        alignItems: 'stretch',
         marginHorizontal: MARGIN_HORIZONTAL,
+        alignItems: 'stretch',
       }}
       renderItem={({item, index}) => (
         <Animated.View
           style={{
-            transform: [{scale: scaleValues[index] ? scaleValues[index] : 0}],
+            transform: [{scale: scaleValues[index]}],
+            flex: 1,
+            marginEnd: index % 2 === 0 ? MARGIN_BETWEEN_COLUMNS : 0,
           }}>
           <CartItem
             product={item}
