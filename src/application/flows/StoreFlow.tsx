@@ -1,13 +1,13 @@
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import React from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
+import ArrowBack from '../../../res/arrow_back.svg';
+import MenuIcon from '../../../res/menu_black_24dp.svg';
 import CartScreen, {MARGIN_HORIZONTAL} from '../../features/cart/CartScreen';
 import CartButton from '../../features/products/components/CartButton';
 import ProductsScreen from '../../features/products/ProductsScreen';
 import {colors} from '../../features/shared/colors';
 import {useAppSelector} from '../../infrastructure/store/hooks/hooks';
-import ArrowBack from '../../res/arrow_back.svg';
-import MenuIcon from '../../res/menu_black_24dp.svg';
 
 export type AppStackParamList = {
   Products: undefined;

@@ -16,7 +16,7 @@ import {
   MARGIN_BETWEEN_COLUMNS,
   MARGIN_HORIZONTAL,
 } from '../CartScreen';
-import CartItem from './CartItem';
+import AnimatedCartItem from './AnimatedCartItem';
 
 const RowsSeparator = () => {
   return <View style={{height: 20}} />;
@@ -120,24 +120,37 @@ const CartList = ({
         marginHorizontal: MARGIN_HORIZONTAL,
         alignItems: 'stretch',
       }}
-      renderItem={({item, index}) => (
-        <Animated.View
-          style={{
-            transform: [{scale: scaleValues[index]}],
-            flex: 1,
-            marginEnd: index % 2 === 0 ? MARGIN_BETWEEN_COLUMNS : 0,
-            maxWidth: maxWidth,
-          }}>
-          <CartItem
+      renderItem={
+        ({item, index}) => (
+          <AnimatedCartItem
             product={item}
-            style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
             onPress={() => {
               setPrevList(displayList);
               onProductPressed(item);
             }}
+            showMargin={index % 2 === 0}
+            wasItemDeleted={false}
           />
-        </Animated.View>
-      )}
+        )
+        // (
+        //   <Animated.View
+        //     style={{
+        //       transform: [{scale: scaleValues[index]}],
+        //       flex: 1,
+        //       marginEnd: index % 2 === 0 ? MARGIN_BETWEEN_COLUMNS : 0,
+        //       maxWidth: maxWidth,
+        //     }}>
+        //     <CartItem
+        //       product={item}
+        //       style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
+        //       onPress={() => {
+        //         setPrevList(displayList);
+        //         onProductPressed(item);
+        //       }}
+        //     />
+        //   </Animated.View>
+        // )}
+      }
       keyExtractor={product => product.id.toString()}
       numColumns={numColumns}
       style={[styles.list, style]}
