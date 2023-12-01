@@ -19,8 +19,8 @@ export const PurchaseListItem = ({purchase}: {purchase: Purchase}) => {
             product={item}
             style={
               index !== purchase.items.length - 1
-                ? {marginEnd: MARGIN_BETWEEN_COLUMNS}
-                : {}
+                ? {marginEnd: MARGIN_BETWEEN_COLUMNS, maxWidth: 150}
+                : {maxWidth: 150}
             }
           />
         )}

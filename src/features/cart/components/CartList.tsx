@@ -1,6 +1,7 @@
 import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   Animated,
+  Dimensions,
   FlatList,
   StyleSheet,
   useWindowDimensions,
@@ -110,6 +111,7 @@ const CartList = ({
   const numColumns = Math.floor(
     (width - 2 * MARGIN_HORIZONTAL - MARGIN_BETWEEN_COLUMNS) / IMAGE_SIZE,
   );
+  const maxWidth = Dimensions.get('window').width - 3 * MARGIN_HORIZONTAL;
   return (
     <FlatList
       data={displayList}
@@ -124,6 +126,7 @@ const CartList = ({
             transform: [{scale: scaleValues[index]}],
             flex: 1,
             marginEnd: index % 2 === 0 ? MARGIN_BETWEEN_COLUMNS : 0,
+            maxWidth: maxWidth,
           }}>
           <CartItem
             product={item}
