@@ -120,37 +120,18 @@ const CartList = ({
         marginHorizontal: MARGIN_HORIZONTAL,
         alignItems: 'stretch',
       }}
-      renderItem={
-        ({item, index}) => (
-          <AnimatedCartItem
-            product={item}
-            onPress={() => {
-              setPrevList(displayList);
-              onProductPressed(item);
-            }}
-            showMargin={index % 2 === 0}
-            wasItemDeleted={false}
-          />
-        )
-        // (
-        //   <Animated.View
-        //     style={{
-        //       transform: [{scale: scaleValues[index]}],
-        //       flex: 1,
-        //       marginEnd: index % 2 === 0 ? MARGIN_BETWEEN_COLUMNS : 0,
-        //       maxWidth: maxWidth,
-        //     }}>
-        //     <CartItem
-        //       product={item}
-        //       style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
-        //       onPress={() => {
-        //         setPrevList(displayList);
-        //         onProductPressed(item);
-        //       }}
-        //     />
-        //   </Animated.View>
-        // )}
-      }
+      renderItem={({item, index}) => (
+        <AnimatedCartItem
+          product={item}
+          onPress={() => {
+            setPrevList(displayList);
+            onProductPressed(item);
+          }}
+          showMargin={index % 2 === 0}
+          wasItemDeleted={false}
+          wasItemMoved={false}
+        />
+      )}
       keyExtractor={product => product.id.toString()}
       numColumns={numColumns}
       style={[styles.list, style]}

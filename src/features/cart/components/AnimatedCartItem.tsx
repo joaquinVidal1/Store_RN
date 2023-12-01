@@ -1,9 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet} from 'react-native';
 import Animated, {
   BounceInUp,
   BounceOutDown,
   useAnimatedStyle,
+  useSharedValue,
   withTiming,
 } from 'react-native-reanimated';
 import {Product} from '../../products/types/Product';
@@ -15,6 +16,7 @@ export type Props = {
   onPress: () => void;
   showMargin: boolean;
   wasItemDeleted: boolean;
+  wasItemMoved: boolean;
 };
 
 const AnimatedCartItem: React.FC<Props> = ({
@@ -22,24 +24,32 @@ const AnimatedCartItem: React.FC<Props> = ({
   showMargin,
   product,
   wasItemDeleted,
+  wasItemMoved,
 }) => {
-  const animatedStyles = useAnimatedStyle(() => {
+  const translateY = useSharedValue(0);
+  const animatedStyle = useAnimatedStyle(() => {
     return {
-      transform: [
-        {translateY: withTiming(yPositions[product.id].value, {duration: 500})},
-      ],
+      transform: [{translateY: translateY.value}],
     };
-  });
+  }, []);
+
+  useEffect(() => {
+    if (wasItemDeleted) {
+      translateY.value = withTiming(-150, {duration: 500}, () => {});
+    }
+  }, [translateY, wasItemDeleted]);
+
+  useEffect(() => {
+    if (wasItemMoved) {
+      translateY.value = withTiming(-150, {duration: 500});
+    }
+  }, [wasItemMoved, translateY]);
 
   return (
     <Animated.View
-      exiting={BounceOutDown}
-      entering={BounceInUp}
-      style={{
-        transform: [{scale: scaleValue}],
-        marginEnd: showMargin ? MARGIN_BETWEEN_COLUMNS : 0,
-        animatedStyles,
-      }}>
+      entering={wasItemMoved ? undefined : BounceInUp}
+      exiting={wasItemDeleted ? BounceOutDown : undefined}
+      style={[animatedStyle]}>
       <CartItem
         product={product}
         style={
