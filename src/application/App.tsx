@@ -1,3 +1,4 @@
+import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
@@ -53,7 +54,9 @@ export default () => {
               loading={<Text>Loading...</Text>}
               persistor={persistor}>
               <SafeAreaProvider>
-                <App />
+                <BottomSheetModalProvider>
+                  <App />
+                </BottomSheetModalProvider>
               </SafeAreaProvider>
             </PersistGate>
           </Provider>

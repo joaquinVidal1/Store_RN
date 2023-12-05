@@ -12,6 +12,7 @@ import {useAppSelector} from '../../infrastructure/store/hooks/hooks';
 export type AppStackParamList = {
   Products: undefined;
   Cart: undefined;
+  EdittingBottomSheet: undefined;
 };
 
 const StoreNavigator = createNativeStackNavigator<AppStackParamList>();

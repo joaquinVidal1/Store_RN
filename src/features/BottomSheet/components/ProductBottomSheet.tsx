@@ -3,12 +3,12 @@ import {
   BottomSheetBackdropProps,
   BottomSheetModal,
 } from '@gorhom/bottom-sheet';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
+import ConfirmationButton from '../../cart/components/ConfirmationButton';
 import ProductListItem from '../../products/components/ProductListItem';
-import {Product} from '../../products/components/ProductsList';
+import {Product} from '../../products/types/Product';
 import {colors} from '../../shared/colors';
-import ConfirmationButton from './ConfirmationButton';
 
 const Backdrop = (props: BottomSheetBackdropProps) => (
   <BottomSheetBackdrop {...props} disappearsOnIndex={-1} />
@@ -16,16 +16,16 @@ const Backdrop = (props: BottomSheetBackdropProps) => (
 
 const ProductBottomSheet = ({
   product,
-  reference,
   onConfirmEdittion,
   onDismiss,
 }: {
   product: Product;
-  reference: React.RefObject<BottomSheetModal>;
   onConfirmEdittion: (newQuantity: number) => void;
   onDismiss: () => void;
 }) => {
   const [quantity, setQuantity] = useState(product.quantity);
+  const bottomSheetModalRef: React.RefObject<BottomSheetModal> =
+    useRef<BottomSheetModal>(null);
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);
@@ -35,10 +35,16 @@ const ProductBottomSheet = ({
     setQuantity(quantity - 1);
   };
 
+  useEffect(() => {
+    product
+      ? bottomSheetModalRef.current?.present()
+      : bottomSheetModalRef.current?.close();
+  }, [product]);
+
   return (
     <BottomSheetModal
       backdropComponent={Backdrop}
-      ref={reference}
+      ref={bottomSheetModalRef}
       snapPoints={['39%']}
       onDismiss={onDismiss}>
       <View style={styles.container}>

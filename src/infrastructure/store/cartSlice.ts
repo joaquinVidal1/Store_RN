@@ -7,14 +7,10 @@ export interface CartProduct {
 
 interface CartState {
   cart: CartProduct[];
-  error?: string;
-  loading: boolean;
 }
 
 const initialState: CartState = {
   cart: [],
-  error: undefined,
-  loading: false,
 };
 
 const cartSlice = createSlice({
