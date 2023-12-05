@@ -4,7 +4,10 @@ import {StyleSheet, Text, View} from 'react-native';
 import Toast from 'react-native-simple-toast';
 import {NavigationProp} from '../../../application/App';
 import {cleanCart} from '../../../infrastructure/store/cartSlice';
-import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../infrastructure/store/hooks/hooks';
 import {useProducts} from '../../products/queries';
 import {colors} from '../../shared/colors';
 import {MARGIN_HORIZONTAL} from '../CartScreen';
@@ -16,6 +19,7 @@ const CartScreenFooter = () => {
   const navigation = useNavigation<NavigationProp>();
   const {data: products} = useProducts();
   const {mutate} = useCheckoutMutation();
+  const dispatch = useAppDispatch();
 
   const onConfirmPurchase = () => {
     mutate(cart, {
@@ -84,6 +88,3 @@ const styles = StyleSheet.create({
 });
 
 export default CartScreenFooter;
-function dispatch(arg0: {payload: undefined; type: 'cart/cleanCart'}) {
-  throw new Error('Function not implemented.');
-}

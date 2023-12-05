@@ -9,17 +9,23 @@ export type Props = {
   product: Product;
   onPress: () => void;
   showMargin: boolean;
+  index: number;
 };
 
-const AnimatedCartItem: React.FC<Props> = ({onPress, showMargin, product}) => {
+const AnimatedCartItem: React.FC<Props> = ({
+  onPress,
+  showMargin,
+  product,
+  index,
+}) => {
   return (
     <Animated.View
       style={[
         styles.productStyle,
         showMargin && {marginEnd: MARGIN_BETWEEN_COLUMNS},
       ]}
-      entering={BounceInUp.duration(1000)}
-      exiting={BounceOutDown.duration(1000)}>
+      entering={BounceInUp.delay(index * 200).duration(700)}
+      exiting={BounceOutDown.duration(700)}>
       <CartItem product={product} style={{}} onPress={onPress} />
     </Animated.View>
   );

@@ -43,6 +43,7 @@ const CartList = ({
             onProductPressed(item);
           }}
           showMargin={index % 2 === 0}
+          index={index}
         />
       )}
       keyExtractor={product => product.id.toString()}
