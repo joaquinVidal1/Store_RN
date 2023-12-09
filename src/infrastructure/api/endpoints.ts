@@ -1,3 +1,4 @@
+import {Purchase} from '../../features/purchases/types/Purchase';
 import {CartProduct} from '../store/cartSlice';
 import {instance} from './instance';
 
@@ -40,6 +41,22 @@ export const makeCheckout = (cart: CartProduct[]) => {
       return response.data;
     })
     .catch(error => {
+      throw error;
+    });
+};
+
+export const getPurchases = (): Promise<Purchase[]> => {
+  return instance
+    .get('/purchases')
+    .then(response => {
+      if (response.status === 200) {
+        return response.data;
+      } else {
+        throw new Error('Error fetching products');
+      }
+    })
+    .catch(error => {
+      console.log(error);
       throw error;
     });
 };

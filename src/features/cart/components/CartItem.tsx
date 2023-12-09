@@ -1,18 +1,16 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {StyleProps} from 'react-native-reanimated';
-import {Product} from '../../products/components/ProductsList';
+import {Product} from '../../products/types/Product';
 import {colors} from '../../shared/colors';
 
-const CartItem = ({
-  product,
-  style,
-  onPress,
-}: {
+export type Props = {
   product: Product;
   style: StyleProps;
-  onPress: () => void;
-}) => {
+  onPress?: () => void;
+};
+
+const CartItem: React.FC<Props> = ({product, style, onPress}) => {
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
       <Image
@@ -23,7 +21,7 @@ const CartItem = ({
       <View style={styles.nameAndPriceContainer}>
         <Text style={styles.productName}>{product.name}</Text>
         <Text style={styles.productPrice}>
-          {'$' + product.price.toFixed(2)}
+          {'$' + product.price?.toFixed(2) || '0'}
         </Text>
       </View>
       <Text style={styles.units}>{product.quantity + ' units'}</Text>
@@ -35,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     minWidth: 150,
     flex: 1,
-    maxWidth: 180,
   },
   iamge: {
     flex: 1,

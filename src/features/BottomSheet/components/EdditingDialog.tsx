@@ -1,22 +1,22 @@
-import React, {useState} from 'react';
+import React, {useMemo, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Modal from 'react-native-modal';
 import ProductListItem from '../../products/components/ProductListItem';
-import {Product} from '../../products/components/ProductsList';
+import {Product} from '../../products/types/Product';
 import {colors} from '../../shared/colors';
 
 const EdditingDialog = ({
   product,
   onConfirmEdittion,
-  showModal,
   onDismiss,
 }: {
   product: Product;
   onConfirmEdittion: (newQuantity: number) => void;
-  showModal: boolean;
   onDismiss: () => void;
 }) => {
   const [quantity, setQuantity] = useState(product.quantity);
+
+  const showModal: boolean = useMemo(() => product !== undefined, [product]);
 
   const incrementQuantity = () => {
     setQuantity(quantity + 1);

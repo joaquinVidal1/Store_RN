@@ -1,15 +1,11 @@
 import React, {useMemo} from 'react';
-import {FlatList, StyleSheet, useWindowDimensions, View} from 'react-native';
-import {StyleProps} from 'react-native-reanimated';
+import {StyleSheet, View} from 'react-native';
+import Animated, {StyleProps} from 'react-native-reanimated';
 import {useAppSelector} from '../../../infrastructure/store/hooks/hooks';
-import {Product} from '../../products/components/ProductsList';
 import {useProducts} from '../../products/queries';
-import {
-  IMAGE_SIZE,
-  MARGIN_BETWEEN_COLUMNS,
-  MARGIN_HORIZONTAL,
-} from '../CartScreen';
-import CartItem from './CartItem';
+import {Product} from '../../products/types/Product';
+import {MARGIN_HORIZONTAL} from '../CartScreen';
+import AnimatedCartItem from './AnimatedCartItem';
 
 const RowsSeparator = () => {
   return <View style={{height: 20}} />;
@@ -23,9 +19,8 @@ const CartList = ({
   onProductPressed: (product: Product) => void;
 }) => {
   const {data: apiProducts} = useProducts();
-  const {width} = useWindowDimensions();
-
   const cart = useAppSelector(state => state.cart.cart);
+
   const displayList: Product[] = useMemo(() => {
     return cart
       .map(cartItem => {
@@ -37,27 +32,22 @@ const CartList = ({
       .filter(product => product) as Product[];
   }, [apiProducts, cart]);
 
-  const numColumns = Math.floor(
-    (width - 2 * MARGIN_HORIZONTAL - MARGIN_BETWEEN_COLUMNS) / IMAGE_SIZE,
-  );
-
   return (
-    <FlatList
+    <Animated.FlatList
       data={displayList}
-      contentContainerStyle={{
-        paddingTop: 24,
-        alignItems: 'stretch',
-        marginHorizontal: MARGIN_HORIZONTAL,
-      }}
+      contentContainerStyle={styles.contentContainer}
       renderItem={({item, index}) => (
-        <CartItem
+        <AnimatedCartItem
           product={item}
-          style={index % 2 === 0 ? {marginEnd: MARGIN_BETWEEN_COLUMNS} : {}}
-          onPress={() => onProductPressed(item)}
+          onPress={() => {
+            onProductPressed(item);
+          }}
+          showMargin={index % 2 === 0}
+          index={index}
         />
       )}
       keyExtractor={product => product.id.toString()}
-      numColumns={numColumns}
+      numColumns={2}
       style={[styles.list, style]}
       ItemSeparatorComponent={RowsSeparator}
     />
@@ -65,9 +55,11 @@ const CartList = ({
 };
 
 const styles = StyleSheet.create({
-  list: {
-    width: '100%',
+  contentContainer: {
+    paddingTop: 24,
+    marginHorizontal: MARGIN_HORIZONTAL,
   },
+  list: {},
 });
 
 export default CartList;
